@@ -1,14 +1,14 @@
 ﻿using System;
-using Bank.AccountOwner;
 
-namespace Bank.Account
+namespace Bank
 {
     internal class Account
     {
         private float balance;
-        public AccountOwner.AccountOwner Owner { get; }
+        public AccountOwner Owner { get; }
+        public AccountAdmin Admin { get; }
 
-        public Account(AccountOwner.AccountOwner owner, float startBalance)
+        public Account(AccountOwner owner, AccountAdmin admin, float startBalance)
         {
             if (startBalance < 100)
             {
@@ -16,6 +16,7 @@ namespace Bank.Account
             }
 
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            Admin = admin ?? throw new ArgumentException(nameof(admin));
             balance = startBalance;
         }
 
@@ -46,3 +47,5 @@ namespace Bank.Account
         }
     }
 }
+
+

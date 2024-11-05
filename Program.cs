@@ -1,6 +1,4 @@
 ﻿using System;
-using Bank.Account;
-using Bank.AccountOwner;
 
 namespace Bank
 {
@@ -8,7 +6,21 @@ namespace Bank
     {
         static void Main(string[] args)
         {
-            Account.Account? myAccount = null;
+            
+            AccountAdmin admin = new AccountAdmin(234567, "John", "Doe");
+            AccountOwner owner = new AccountOwner(123456, "Jane", "Doe");
+
+            Account myAccount = new Account(owner, admin, 100);
+            Console.WriteLine($"Hej {myAccount.Owner.FullName}. Din konto er oprettet med {myAccount.Admin.FullName} som admin.");
+
+            Console.WriteLine($"{myAccount.Deposit(100)}");
+            Console.WriteLine($"Balance after deposit: {myAccount.ShowBalance()}");
+
+            Console.WriteLine($"{myAccount.Withdraw(50)}");
+            Console.WriteLine($"Balance after withdrawal: {myAccount.ShowBalance()}");
+
+
+            /*Account.Account? myAccount = null;
 
             while (true)
             {
@@ -117,7 +129,7 @@ namespace Bank
                         Console.WriteLine("Ugyldigt valg.");
                         break;
                 }
-            }
+            }*/
         }
     }
 }
