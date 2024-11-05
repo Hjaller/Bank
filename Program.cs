@@ -8,56 +8,114 @@ namespace Bank
     {
         static void Main(string[] args)
         {
+            Account.Account? myAccount = null;
+
             while (true)
             {
-                Console.Write("Opret en konto:\n");
+                Console.WriteLine("Velkommen til banken!");
+                Console.WriteLine("Tryk på en tast O, for at oprette en konto.");
+                Console.WriteLine("Tryk på en tast I, for at indbetale penge.");
+                Console.WriteLine("Tryk på en tast U, for at hæve penge.");
+                Console.WriteLine("Tryk på en tast A, for at afslutte.");
 
-                Console.Write("Indtast kundenummer: ");
-                int customerId;
-                while (!int.TryParse(Console.ReadLine(), out customerId) || customerId.ToString().Length != 6)
+                ConsoleKey key = Console.ReadKey(true).Key;
+                switch (key)
                 {
-                    Console.Write("Ugyldigt kundenummer. Indtast et 6-cifret nummer: ");
-                }
+                    case ConsoleKey.O:
+                        Console.WriteLine("Opret en konto:");
 
-                Console.Write("Indtast fornavn: ");
-                string firstName = Console.ReadLine();
-                while (string.IsNullOrWhiteSpace(firstName))
-                {
-                    Console.Write("Fornavn må ikke være tomt. Indtast fornavn: ");
-                    firstName = Console.ReadLine();
-                }
+                        Console.Write("Indtast kundenummer: ");
+                        int customerId;
+                        while (!int.TryParse(Console.ReadLine(), out customerId) || customerId.ToString().Length != 6)
+                        {
+                            Console.Write("Ugyldigt kundenummer. Indtast et 6-cifret nummer: ");
+                        }
 
-                Console.Write("Indtast efternavn: ");
-                string lastName = Console.ReadLine();
-                while (string.IsNullOrWhiteSpace(lastName))
-                {
-                    Console.Write("Efternavn må ikke være tomt. Indtast efternavn: ");
-                    lastName = Console.ReadLine();
-                }
+                        Console.Write("Indtast fornavn: ");
+                        string firstName = Console.ReadLine();
+                        while (string.IsNullOrWhiteSpace(firstName))
+                        {
+                            Console.Write("Fornavn må ikke være tomt. Indtast fornavn: ");
+                            firstName = Console.ReadLine();
+                        }
 
-                Console.Write("Indtast startbalance: ");
-                float startBalance;
-                while (!float.TryParse(Console.ReadLine(), out startBalance) || startBalance < 100)
-                {
-                    Console.Write("Ugyldig startbalance. Indtast et tal større end eller lig med 100: ");
-                }
+                        Console.Write("Indtast efternavn: ");
+                        string lastName = Console.ReadLine();
+                        while (string.IsNullOrWhiteSpace(lastName))
+                        {
+                            Console.Write("Efternavn må ikke være tomt. Indtast efternavn: ");
+                            lastName = Console.ReadLine();
+                        }
 
-                try
-                {
-                    AccountOwner.AccountOwner owner = new AccountOwner.AccountOwner(customerId, firstName, lastName);
-                    Account.Account myAccount = new Account.Account(owner, startBalance);
-                    Console.WriteLine($"Account Owner: {owner.FullName}");
-                    Console.WriteLine("Initial Balance: " + myAccount.ShowBalance());
+                        Console.Write("Indtast startbalance: ");
+                        float startBalance;
+                        while (!float.TryParse(Console.ReadLine(), out startBalance) || startBalance < 100)
+                        {
+                            Console.Write("Ugyldig startbalance. Indtast et tal større end eller lig med 100: ");
+                        }
 
-                    Console.WriteLine(myAccount.Deposit(50));
-                    Console.WriteLine("Balance after deposit: " + myAccount.ShowBalance());
+                        try
+                        {
+                            AccountOwner.AccountOwner owner = new AccountOwner.AccountOwner(customerId, firstName, lastName);
+                            myAccount = new Account.Account(owner, startBalance);
+                            Console.WriteLine($"Hej {owner.FullName}, din konto er oprettet.");
+                            Console.WriteLine("Initial Balance: " + myAccount.ShowBalance());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error: " + ex.Message);
+                        }
+                        break;
 
-                    Console.WriteLine(myAccount.Withdraw(100));
-                    Console.WriteLine("Balance after withdrawal: " + myAccount.ShowBalance());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error: " + ex.Message);
+                    case ConsoleKey.I:
+                        if (myAccount == null)
+                        {
+                            Console.WriteLine("Du skal oprette en konto først.");
+                            break;
+                        }
+
+                        Console.Write("Indtast beløb til indbetaling: ");
+                        float depositAmount;
+                        while (!float.TryParse(Console.ReadLine(), out depositAmount) || depositAmount <= 0)
+                        {
+                            Console.Write("Ugyldigt beløb. Indtast et positivt tal: ");
+                        }
+
+                        Console.WriteLine(myAccount.Deposit(depositAmount));
+                        Console.WriteLine("Balance after deposit: " + myAccount.ShowBalance());
+                        break;
+
+                    case ConsoleKey.U:
+                        if (myAccount == null)
+                        {
+                            Console.WriteLine("Du skal oprette en konto først.");
+                            break;
+                        }
+
+                        Console.Write("Indtast beløb til hævning: ");
+                        float withdrawAmount;
+                        while (!float.TryParse(Console.ReadLine(), out withdrawAmount) || withdrawAmount <= 0)
+                        {
+                            Console.Write("Ugyldigt beløb. Indtast et positivt tal: ");
+                        }
+
+                        try
+                        {
+                            Console.WriteLine(myAccount.Withdraw(withdrawAmount));
+                            Console.WriteLine("Balance after withdrawal: " + myAccount.ShowBalance());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error: " + ex.Message);
+                        }
+                        break;
+
+                    case ConsoleKey.A:
+                        return;
+
+                    default:
+                        Console.WriteLine("Ugyldigt valg.");
+                        break;
                 }
             }
         }
