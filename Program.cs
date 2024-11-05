@@ -32,7 +32,7 @@ namespace Bank
                         }
 
                         Console.Write("Indtast fornavn: ");
-                        string firstName = Console.ReadLine();
+                        string? firstName = Console.ReadLine();
                         while (string.IsNullOrWhiteSpace(firstName))
                         {
                             Console.Write("Fornavn må ikke være tomt. Indtast fornavn: ");
@@ -40,7 +40,7 @@ namespace Bank
                         }
 
                         Console.Write("Indtast efternavn: ");
-                        string lastName = Console.ReadLine();
+                        string? lastName = Console.ReadLine();
                         while (string.IsNullOrWhiteSpace(lastName))
                         {
                             Console.Write("Efternavn må ikke være tomt. Indtast efternavn: ");
