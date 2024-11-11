@@ -13,11 +13,69 @@ namespace Bank
             Account myAccount = new Account(owner, admin, 100);
             Console.WriteLine($"Hej {myAccount.Owner.FullName}. Din konto er oprettet med {myAccount.Admin.FullName} som admin.");
 
-            Console.WriteLine($"{myAccount.Deposit(100)}");
+            /*Console.WriteLine($"{myAccount.Deposit(100)}");
             Console.WriteLine($"Balance after deposit: {myAccount.ShowBalance()}");
 
             Console.WriteLine($"{myAccount.Withdraw(50)}");
-            Console.WriteLine($"Balance after withdrawal: {myAccount.ShowBalance()}");
+            Console.WriteLine($"Balance after withdrawal: {myAccount.ShowBalance()}"); */
+
+            Console.Write("Indtast det beløb du ønsker at indsætte på din konto: ");
+            string depositInput = Console.ReadLine();
+            try
+            {
+                int depositAmount = int.Parse(depositInput);
+                if (depositAmount <= 0)
+                {
+                    throw new ArgumentException("Beløbet skal være positivt.");
+                }
+                myAccount.Deposit(depositAmount);
+                Console.WriteLine($"Balance efter indbetaling: {myAccount.ShowBalance()} DKK");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Ugyldigt beløb. Indtast et gyldigt tal.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine($"Nuværende balance: {myAccount.ShowBalance()} DKK");
+            }
+
+            Console.Write("Indtast det beløb du ønsker at hæve fra din konto: ");
+            string withdrawInput = Console.ReadLine();
+            try
+            {
+                int withdrawAmount = int.Parse(withdrawInput);
+                if (withdrawAmount <= 0)
+                {
+                    throw new ArgumentException("Beløbet skal være positivt.");
+                }
+                if (withdrawAmount > myAccount.ShowBalance())
+                {
+                    throw new InvalidOperationException("Ikke tilstrækkelig balance.");
+                }
+                myAccount.Withdraw(withdrawAmount);
+                Console.WriteLine($"Balance efter hævning: {myAccount.ShowBalance()} DKK");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Ugyldigt beløb. Indtast et gyldigt tal.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine($"Nuværende balance: {myAccount.ShowBalance()} DKK");
+            }
 
 
             /*Account.Account? myAccount = null;
